@@ -1,0 +1,125 @@
+body{
+
+    background-image: url("./img/pocetna.jpg");
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: cover;
+    background-position: center center;
+  
+}
+
+button{
+width: 50%;
+margin: 2%;
+align-self: center;
+}
+.slikaaranzmana{
+
+    background-repeat: no-repeat;
+    background-attachment:unset;
+    background-size:contain;
+    background-position:top;   
+}
+.nazivagencije{
+    font-size:150%;
+    font-family:'Lucida Handwriting',cursive;
+    display: flex;
+    justify-content: center;
+    background-color: rgb(243, 225, 204,0.5);
+}
+
+.kontejnerMusterijaIDestinacija{
+    display: flex;
+    flex-direction: row;
+    /*flex-wrap: wrap;*/
+    width: 100%;
+    min-height:700px;
+    padding: 2%;
+}
+
+.kontejnerAranzmana{
+display:flex;
+justify-content:space-evenly;
+flex-wrap: wrap;
+flex-direction: row;
+}
+
+.kontejnerAranzman{
+display: flex;
+flex-grow: 2;
+flex-direction: column;
+margin: 1%;
+width: 100%;
+height: auto;
+
+}
+
+.kontejnerAranzman label{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    font-size: medium;
+    width: inherit;
+    background-color: rgb(243, 225, 204,0.4);
+    padding:3px;
+  
+}
+
+.kontejnerMusterija{
+
+    display: flex;
+    flex-grow: 1;
+    flex-direction: column;
+    backdrop-filter: blur(2px);
+}
+
+.atributiMusterije{
+    width: 100%;
+}
+.aranzman{
+    border: 1px solid black;
+    min-width: 100px;
+    min-height: 100px;
+    text-align: center;
+
+}
+.aranzman label {
+    font-weight: bolder;
+    background-blend-mode:overlays;
+}
+
+[class*="saputnik"]{
+display: flex;
+flex-direction: column;
+padding-top: 11%;
+
+
+}
+
+@media only screen and (max-width:540px){
+    .kontejnerMusterijaIDestinacija{
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        width: 100%;
+        min-height:700px;
+        padding: 2%;
+    } 
+
+    .slikaaranzmana{
+
+        background-repeat: no-repeat;
+        background-attachment:unset;
+        background-size:cover;
+        background-position:center;   
+    }
+}
+
+footer{
+
+    position: fixed;
+    right: 15px;
+    bottom: 10px;
+    z-index: -1;
+}
