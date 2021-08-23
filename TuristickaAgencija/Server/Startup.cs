@@ -33,11 +33,11 @@ namespace Server
                 policy.AllowAnyMethod()
                 .AllowAnyHeader()
                 .AllowAnyOrigin();
-                /*.WithOrigins(new string[]{
+                //.WithOrigins(new string[]{
 
-                                "https://127.0.0.1:8080"
+                     //           "https://127.0.0.1:8080"
 
-                });*/
+              //  });
             }));
 
 

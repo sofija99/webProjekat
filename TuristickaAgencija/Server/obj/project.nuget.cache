@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "TUrzIkLW65Bu2kCwjHHDwL8OPNIts6yUYqLnu0qyJ1AalKV00CF9YQ+apbkjkGy3DNvNEgqpzfrShYkHBc02Ww==",
+  "dgSpecHash": "2mYnkpkiXEcWYhDy2QtfqR1TsSP48wzCXOzgHKnhRIeZ651DU/8Y8A2ltIrKlRwaXhIQ7nBD3azyq4qQoCVkYQ==",
   "success": true,
-  "projectFilePath": "C:\\Users\\Jigglypuff\\Desktop\\web programirane\\TuristickaAgencija\\Server\\Server.csproj",
+  "projectFilePath": "C:\\Users\\Jigglypuff\\Desktop\\web programirane\\webProjekat\\TuristickaAgencija\\Server\\Server.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Jigglypuff\\.nuget\\packages\\humanizer.core\\2.8.26\\humanizer.core.2.8.26.nupkg.sha512",
     "C:\\Users\\Jigglypuff\\.nuget\\packages\\microsoft.csharp\\4.7.0\\microsoft.csharp.4.7.0.nupkg.sha512",

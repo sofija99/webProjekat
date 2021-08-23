@@ -1,7 +1,7 @@
 import {Aranzman} from "./Aranzman.js"
 
 export class Agencija{
-    constructor(naziv, adresa, kontaktTelefon, vlasnik){
+    constructor(naziv="nn", adresa="nn", kontaktTelefon="00", vlasnik="nn"){
         this.naziv=naziv
         this.adresa=adresa
         this.kontaktTelefon=kontaktTelefon
@@ -13,12 +13,18 @@ export class Agencija{
     crtaj(host){
         if(!host)
         throw new Exception("Roditeljski el ne postoji!")
+//<h1 class='nazivagencije'>Turistička agencija </h1>
 
-        const nazivagencije= host.querySelector(".nazivagencije")
+ const nazivagencije=document.createElement("label");
+ nazivagencije.className='nazivagencije'
+
+
+
+        //const nazivagencije= host.querySelector(".nazivagencije")
         nazivagencije.textContent=`Turisticka agencija ${this.naziv}`
-        host.appendChild(nazivagencije)
+        //host.appendChild(nazivagencije)
       
-   
+   host.appendChild(nazivagencije)
 
         //ARANZMANI
         const kontejnerAranzmana=document.createElement("div")
@@ -29,12 +35,14 @@ export class Agencija{
             aranzman.crtajAranzmane(kontejnerAranzmana)
         })
 
-
-        const footer=host.querySelector("footer")
-        footer.innerHTML=`Kontankt telefon: ${this.kontaktTelefon} <br/>
+        const footeragencije=document.createElement("div")
+        footeragencije.className='footer'
+       
+        //const footer=host.querySelector(".footer")
+        footeragencije.innerHTML=`Kontankt telefon: ${this.kontaktTelefon} <br/>
         Adresa: ${this.adresa}<br/>
         Vlasnik: ${this.vlasnik}`
-        
+         host.appendChild(footeragencije)
     }
 
     dodajAranzman(noviAranzman){

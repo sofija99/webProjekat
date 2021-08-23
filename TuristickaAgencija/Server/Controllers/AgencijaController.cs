@@ -41,7 +41,7 @@ namespace Server.Controllers
         {
             var agencija = Context.Agencije.Include(p => p.aranzmani)
                                                  .Where(b => b.ID == ida).SingleOrDefaultAsync();
-                                                          
+
             return await agencija;
         }
 
@@ -177,38 +177,36 @@ namespace Server.Controllers
         {
             var aranzman = await Context.Aranzmani.FindAsync(idAranzmana);
             musterija.aranzman = aranzman;
+//var smusterija=await Context.Musterije.Where(p => p.brojPasosa == musterija.brojPasosa).FirstOrDefaultAsync();
+            int brojSaputnika = 0;
+            var saputnici = await Context.Saputnici.Where(p => p.musterija.brojPasosa == musterija.brojPasosa).ToArrayAsync();
+            brojSaputnika=saputnici.Length;
+         
 
 
-
-            if (aranzman.brojZauzetihMesta + musterija.brojSaputnika + 1 > aranzman.brojMesta)
+            if (aranzman.brojZauzetihMesta + musterija.brojSaputnika -brojSaputnika > aranzman.brojMesta)
             {
                 return StatusCode(406);
             }
             else
             {
-                int brojSaputnika = 0;
-                while (true)
-                {
-                    var saputnik = await Context.Saputnici.Where(p => p.musterija.brojPasosa == musterija.brojPasosa).FirstOrDefaultAsync();
 
-                    if (saputnik != null)
-                        Context.Remove(saputnik);
-                    await Context.SaveChangesAsync();
+                brojSaputnika = 0;
+             while (true)
+            {
+                var saputnik = await Context.Saputnici.Where(p => p.musterija.brojPasosa == musterija.brojPasosa).FirstOrDefaultAsync();
 
-                    if (saputnik == null)
-                        break;
+                if (saputnik != null)
+                    Context.Remove(saputnik);
+                await Context.SaveChangesAsync();
 
-                    brojSaputnika++;
-                }
+                if (saputnik == null)
+                    break;
 
-
-
-                if (aranzman != null)
-                {
-                    aranzman.brojZauzetihMesta = aranzman.brojZauzetihMesta - brojSaputnika + musterija.brojSaputnika;
-                    Context.Update<Aranzman>(aranzman);
-                }
-
+                brojSaputnika++;
+            }
+                aranzman.brojZauzetihMesta = aranzman.brojZauzetihMesta - brojSaputnika + musterija.brojSaputnika;
+                Context.Update<Aranzman>(aranzman);
 
                 Context.Update<Musterija>(musterija);
                 await Context.SaveChangesAsync();

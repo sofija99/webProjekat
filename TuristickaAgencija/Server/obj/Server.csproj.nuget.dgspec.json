@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Jigglypuff\\Desktop\\web programirane\\TuristickaAgencija\\Server\\Server.csproj": {}
+    "C:\\Users\\Jigglypuff\\Desktop\\web programirane\\webProjekat\\TuristickaAgencija\\Server\\Server.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Jigglypuff\\Desktop\\web programirane\\TuristickaAgencija\\Server\\Server.csproj": {
+    "C:\\Users\\Jigglypuff\\Desktop\\web programirane\\webProjekat\\TuristickaAgencija\\Server\\Server.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Jigglypuff\\Desktop\\web programirane\\TuristickaAgencija\\Server\\Server.csproj",
+        "projectUniqueName": "C:\\Users\\Jigglypuff\\Desktop\\web programirane\\webProjekat\\TuristickaAgencija\\Server\\Server.csproj",
         "projectName": "Server",
-        "projectPath": "C:\\Users\\Jigglypuff\\Desktop\\web programirane\\TuristickaAgencija\\Server\\Server.csproj",
+        "projectPath": "C:\\Users\\Jigglypuff\\Desktop\\web programirane\\webProjekat\\TuristickaAgencija\\Server\\Server.csproj",
         "packagesPath": "C:\\Users\\Jigglypuff\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Jigglypuff\\Desktop\\web programirane\\TuristickaAgencija\\Server\\obj\\",
+        "outputPath": "C:\\Users\\Jigglypuff\\Desktop\\web programirane\\webProjekat\\TuristickaAgencija\\Server\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\Jigglypuff\\AppData\\Roaming\\NuGet\\NuGet.Config",

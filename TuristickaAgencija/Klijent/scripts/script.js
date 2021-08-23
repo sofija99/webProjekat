@@ -1,7 +1,7 @@
 import { Agencija } from "./models/Agencija.js";
 import { Aranzman } from "./models/Aranzman.js";
 
-let idAgencije = 3;
+/*let idAgencije = 3;
 fetch(`https://localhost:5001/Agencija/PreuzmiAgencijuSaID?ida=3`).then((p) => {
   p.json().then((data) => {
    
@@ -30,14 +30,14 @@ fetch(`https://localhost:5001/Agencija/PreuzmiAgencijuSaID?ida=3`).then((p) => {
 
     Agencija1.crtaj(document.body);
   });
-});
+});*/
 
 
 
-/*
+
 fetch(`https://localhost:5001/Agencija/PreuzmiAgenciju`).then((p) => {
   p.json().then((data) => {
-    data.forEach(data=>{
+    data.forEach((data,index)=>{
     //console.log(data);
     const Agencija1 = new Agencija(
       data.naziv,
@@ -45,6 +45,9 @@ fetch(`https://localhost:5001/Agencija/PreuzmiAgenciju`).then((p) => {
       data.kontakTelefon,
       data.vlasnik
     );
+   console.log(Agencija1)
+    const kontejnerAgencije=document.createElement("div")
+    kontejnerAgencije.className=`kontejnerAgencije${index}`
 
       data.aranzmani.forEach((aranzman) => {
       Agencija1.dodajAranzman(
@@ -57,12 +60,16 @@ fetch(`https://localhost:5001/Agencija/PreuzmiAgenciju`).then((p) => {
           new Date( aranzman.datumPovratka),
           aranzman.tip,
           aranzman.brojDana,
-          aranzman.brojZauzetihMesta
+          aranzman.brojZauzetihMesta,
+kontejnerAgencije
         )
       );
     });
 
-    Agencija1.crtaj(document.body);
+ 
+    
+    Agencija1.crtaj(kontejnerAgencije);
+    document.body.appendChild(kontejnerAgencije)
   })
   });
-});*/
+});

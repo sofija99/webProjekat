@@ -1,16 +1,17 @@
 import { Musterija } from "./Musterija.js";
 export class Aranzman {
   constructor(
-    id,
-    brojmesta,
-    naziv,
-    cena,
-    slika,
-    datumpolaska,
-    datumpovratka,
-    tip,
-    brojdana,
-    brojzauzetihmesta = 0
+    id = 999,
+    brojmesta = 0,
+    naziv = "nn",
+    cena = 0,
+    slika = "podrazumenvana",
+    datumpolaska = Date().now,
+    datumpovratka = Date().now,
+    tip = "nn",
+    brojdana = 0,
+    brojzauzetihmesta = 0,
+    host=null
   ) {
     this.id = id;
     this.brojMesta = brojmesta;
@@ -23,10 +24,14 @@ export class Aranzman {
     this.datumPolaska = datumpolaska.toDateString();
     this.datumPovratka = datumpovratka.toDateString();
     this.tip = tip;
+    if (isNaN(brojdana)) throw new Exception("brojdana mora biti broj");
     this.brojDana = brojdana;
+    if (isNaN(brojzauzetihmesta))
+      throw new Exception("broj zauzetih mesta mora biti broj");
     this.brojZauzetihMesta = brojzauzetihmesta;
     this.musterije = [];
     this.novaMusterija = new Musterija();
+    this.host=host;
   }
 
   nePostojiSlika(urlSlike) {
@@ -57,29 +62,29 @@ export class Aranzman {
 
     kontAranz.onclick = (ev) => {
       //ako vec postoji obrisi pa onda pravi drugi
-      const trenutniprikazaranzmana = document.querySelector(
+      const trenutniprikazaranzmana = host.querySelector(
         ".kontejnerMusterijaIDestinacija"
       );
 
       if (trenutniprikazaranzmana != null) {
         trenutniprikazaranzmana.remove();
-        let aranzmani = document.querySelectorAll(".aranzman");
+        let aranzmani = host.querySelectorAll(".aranzman");
 
         aranzmani.forEach((el) => {
-          el.style.opacity = "unset";
+          el.style.border = "unset";
         });
       }
 
-      kontAranz.style.opacity = 0.6;
+      kontAranz.style.border = "2px solid red";
 
-      this.pogledajAranzman(this);
+      this.pogledajAranzman(host);
     };
   }
 
-  pogledajAranzman(element) {
+  pogledajAranzman(host) {
     const kontejnerMusterijaIDestinacija = document.createElement("div");
     kontejnerMusterijaIDestinacija.className = "kontejnerMusterijaIDestinacija";
-    document.body.appendChild(kontejnerMusterijaIDestinacija);
+    host.appendChild(kontejnerMusterijaIDestinacija);
 
     const kontejnerMusterija = document.createElement("div");
     kontejnerMusterija.className = "kontejnerMusterija";
@@ -200,13 +205,13 @@ export class Aranzman {
     proveraPrijave.innerHTML = "Proveri prijavu";
     host.appendChild(proveraPrijave);
     proveraPrijave.onclick = (ev) => {
-      const brpasosa = document.querySelector(".brojPasosa");
+      const brpasosa = host.querySelector(".brojPasosa");
       if (brpasosa.value === "") {
         alert("morate uneti broj pasosa");
         brpasosa.style.backgroundColor = "#c29b9b";
       } else {
         brpasosa.style.backgroundColor = "white";
-        this.proveraPrijave(brpasosa.value);
+        this.proveraPrijave(brpasosa.value,host);
       }
     };
   }
@@ -268,23 +273,25 @@ export class Aranzman {
     this.novaMusterija.prijaviSe(this);
   }
 
-  proveraPrijave(element) {
-    
+  proveraPrijave(element,host) {
     fetch(
       `https://localhost:5001/Agencija/PronadjiMusteriju/${this.id}/${element}`
     )
       .then((res) => {
         if (res.status == 200) {
           res.json().then((data) => {
-           
             let imenasaputnika = [];
             let prezimenasaputnika = [];
             let brojpasosasaputnika = [];
-            for (let i = 0; i < data.brojSaputnika; i++) {
-              imenasaputnika[i] = data.saputnici[i].ime;
-              prezimenasaputnika[i] = data.saputnici[i].prezime;
-              brojpasosasaputnika[i] = data.saputnici[i].brojPasosa;
-            }
+            console.log(data.saputnici);
+            if (data.saputnici.length === 0) data.brojSaputnika = 0;
+            else
+              for (let i = 0; i < data.brojSaputnika; i++) {
+                imenasaputnika[i] = data.saputnici[i].ime;
+                prezimenasaputnika[i] = data.saputnici[i].prezime;
+                brojpasosasaputnika[i] = data.saputnici[i].brojPasosa;
+              }
+
             this.novaMusterija = new Musterija(
               data.id,
               data.ime,
@@ -310,12 +317,12 @@ export class Aranzman {
 
   prikaziPodatke(element) {
     var zauzeta = Number(element) + Number(this.brojZauzetihMesta);
-    let listaZauzetihMesta = document.querySelector(".listaZauzetihMesta");
+    let listaZauzetihMesta = this.host.querySelector(".listaZauzetihMesta");
     listaZauzetihMesta.innerHTML = `Broj zauzetih mesta:   ${zauzeta}`;
     let aranzmani = document.querySelectorAll(".aranzman");
 
     aranzmani.forEach((el) => {
-      if (el.style.opacity === "0.6") {
+      if (el.style.border === "2px solid red") {
         let labelaAranzmanaMesta = el.querySelector(
           ".zauzetaKrozSlobodnaMesta"
         );
