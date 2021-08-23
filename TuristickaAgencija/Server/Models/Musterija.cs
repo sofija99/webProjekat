@@ -39,7 +39,7 @@ namespace Server.Models
         [Column("kontaktTelefon")]
         public string kontaktTelefon { get; set; }
 
-        //
+        
         public List<Saputnik> saputnici { get; set; }
         //pokazivac na aranzman
         [JsonIgnore]

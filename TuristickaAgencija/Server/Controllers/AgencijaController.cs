@@ -41,7 +41,7 @@ namespace Server.Controllers
         {
             var agencija = Context.Agencije.Include(p => p.aranzmani)
                                                  .Where(b => b.ID == ida).SingleOrDefaultAsync();
-            // var agencija = await Context.Agencije.FindAsync(ida);                                                 
+                                                          
             return await agencija;
         }
 
@@ -78,7 +78,6 @@ namespace Server.Controllers
         }
 
         //CRUD ARANZMAN
-
         [Route("PreuzmiAranzman")]
         [HttpGet]
         public async Task<List<Aranzman>> PreuzmiAranzman()
@@ -121,7 +120,6 @@ namespace Server.Controllers
 
 
         //CRUD Musterija
-
         [Route("PreuzmiMusteriju")]
         [HttpGet]
         public async Task<List<Musterija>> PreuzmiMusteriju()
@@ -143,7 +141,7 @@ namespace Server.Controllers
 
             if (Context.Musterije.Any(musterijapom => musterijapom.brojPasosa == musterija.brojPasosa && musterijapom.aranzman.ID == idAranzmana))
             {
-                var musterijanova = Context.Musterije.Where(p => p.aranzman.ID == idAranzmana && p.brojPasosa == musterija.brojPasosa).FirstOrDefault();
+                var musterijanova = Context.Musterije.Include(p => p.saputnici).Where(p => p.aranzman.ID == idAranzmana && p.brojPasosa == musterija.brojPasosa).FirstOrDefault();
                 return BadRequest(new { musterijanova = musterijanova });
             }
             if (aranzman.brojZauzetihMesta + musterija.brojSaputnika + 1 > aranzman.brojMesta)
@@ -168,17 +166,7 @@ namespace Server.Controllers
         [EnableCors("cors")]
         public async Task<Musterija> PronadjiMusteriju(int idAranzmana, int brojPasosaMusterije)
         {
-
-
-
-            //if (Context.Musterije.Any(musterijapom => musterijapom.brojPasosa == brojPasosaMusterije && musterijapom.aranzman.ID == idAranzmana))
-            //{
-            // var musterijanova = Context.Musterije.Where(p => p.aranzman.ID == idAranzmana && p.brojPasosa==brojPasosaMusterije).FirstOrDefault();
-            // return BadRequest(new { musterijanova = musterijanova });
-
             return await Context.Musterije.Include(p => p.saputnici).Where(p => p.aranzman.ID == idAranzmana && p.brojPasosa == brojPasosaMusterije).FirstOrDefaultAsync();
-            //}
-
 
         }
 
@@ -190,8 +178,7 @@ namespace Server.Controllers
             var aranzman = await Context.Aranzmani.FindAsync(idAranzmana);
             musterija.aranzman = aranzman;
 
-            //Console.Write(aranzman);
-            //
+
 
             if (aranzman.brojZauzetihMesta + musterija.brojSaputnika + 1 > aranzman.brojMesta)
             {
@@ -199,26 +186,26 @@ namespace Server.Controllers
             }
             else
             {
-                int brojSaputnika=0;
-                  while(true)//  for (var i = 0; i < musterija.brojSaputnika; i++)
+                int brojSaputnika = 0;
+                while (true)
                 {
-                    var saputnik = await Context.Saputnici.Where(p => p.musterija.ID == musterija.ID).FirstOrDefaultAsync();
-                    //Console.WriteLine("////////////////"+saputnik);
-                    if(saputnik!=null)
-                    Context.Remove(saputnik);
-                    await Context.SaveChangesAsync();
-                   
-                    if(saputnik==null)
-                    break;
-                    
-                     brojSaputnika++;
-                }
-                //await Context.SaveChangesAsync();
+                    var saputnik = await Context.Saputnici.Where(p => p.musterija.brojPasosa == musterija.brojPasosa).FirstOrDefaultAsync();
 
-                
+                    if (saputnik != null)
+                        Context.Remove(saputnik);
+                    await Context.SaveChangesAsync();
+
+                    if (saputnik == null)
+                        break;
+
+                    brojSaputnika++;
+                }
+
+
+
                 if (aranzman != null)
                 {
-                    aranzman.brojZauzetihMesta = aranzman.brojZauzetihMesta -brojSaputnika+ musterija.brojSaputnika;
+                    aranzman.brojZauzetihMesta = aranzman.brojZauzetihMesta - brojSaputnika + musterija.brojSaputnika;
                     Context.Update<Aranzman>(aranzman);
                 }
 
@@ -235,25 +222,25 @@ namespace Server.Controllers
         [EnableCors("cors")]
         public async Task<IActionResult> IzbrisiMusteriju(int idmusterije, int idAranzmana)
         {
-            //nadji musterijju i saputnici
-            //obrisi saputnici 
+            //nadji musterijju i saputnike
+            //obrisi saputnike
             //smanji zauzeta mesta
             //obrisi musteriju
 
 
             var staraMusterija = await Context.Musterije.FindAsync(idmusterije);
-             // Context.Remove(staraMusterija);
+
             if (staraMusterija != null)
             {
-                // if(staraMusterija.brojSaputnika != 0)
+
                 for (var i = 0; i < staraMusterija.brojSaputnika; i++)
                 {
                     var saputnik = await Context.Saputnici.Where(p => p.musterija.ID == idmusterije).FirstOrDefaultAsync();
-                    //Console.WriteLine("////////////////"+saputnik);
-                     Context.Remove(saputnik);
+
+                    Context.Remove(saputnik);
                     await Context.SaveChangesAsync();
                 }
-                //await Context.SaveChangesAsync();
+
 
                 var aranzman = await Context.Aranzmani.FindAsync(idAranzmana);
                 if (aranzman != null)
@@ -271,8 +258,9 @@ namespace Server.Controllers
             }
 
         }
-        //CRUD saputnik
 
+
+        //CRUD saputnik
         [Route("PreuzmiSaputnika")]
         [HttpGet]
         public async Task<List<Saputnik>> PreuzmiSaputnika()
@@ -286,7 +274,7 @@ namespace Server.Controllers
         {
             var musterija = await Context.Musterije.FindAsync(idMusterije);
             saputnik.musterija = musterija;
-            // musterija.brojSaputnika+=1;
+
             Context.Saputnici.Add(saputnik);
             await Context.SaveChangesAsync();
 
@@ -312,11 +300,6 @@ namespace Server.Controllers
             await Context.SaveChangesAsync();
 
         }
-
-
-
-
-
 
 
     }

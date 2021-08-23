@@ -46,7 +46,7 @@ namespace Server.Models
         [Column("brojZauzetihMesta")]
         public int brojZauzetihMesta { get; set; }
 
-        //
+        
         public List<Musterija> musterije { get; set; }
 
         //pokazivac na agenciju

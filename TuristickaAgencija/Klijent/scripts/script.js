@@ -4,7 +4,7 @@ import { Aranzman } from "./models/Aranzman.js";
 let idAgencije = 3;
 fetch(`https://localhost:5001/Agencija/PreuzmiAgencijuSaID?ida=3`).then((p) => {
   p.json().then((data) => {
-    //console.log(data);
+   
     const Agencija1 = new Agencija(
       data.naziv,
       data.adresa,

@@ -28,7 +28,7 @@ namespace Server.Models
         [Column("vlasnik")]
         [DataType(DataType.Text)]
         public string vlasnik { get; set; }
-        //
+        
         public List<Aranzman> aranzmani { get; set; }
 
 

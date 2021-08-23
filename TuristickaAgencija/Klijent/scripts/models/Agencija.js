@@ -18,7 +18,7 @@ export class Agencija{
         nazivagencije.textContent=`Turisticka agencija ${this.naziv}`
         host.appendChild(nazivagencije)
       
-        console.log(nazivagencije)
+   
 
         //ARANZMANI
         const kontejnerAranzmana=document.createElement("div")

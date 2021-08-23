@@ -21,6 +21,7 @@ namespace Server.Models
         public string ime { get; set; }
 
         [Column("prezime")]
+        [DataType(DataType.Text)]
         public string prezime { get; set; }
 
         [Column("brojPasosa")]

@@ -19,7 +19,6 @@ export class Aranzman {
     this.slika = "../../style/img/" + slika + ".jpg";
     if (this.nePostojiSlika(this.slika)) {
       this.slika = "../../style/img/podrazumevana.jpg";
-      //console.log("***********************************");
     }
     this.datumPolaska = datumpolaska.toDateString();
     this.datumPovratka = datumpovratka.toDateString();
@@ -67,13 +66,11 @@ export class Aranzman {
         let aranzmani = document.querySelectorAll(".aranzman");
 
         aranzmani.forEach((el) => {
-          // el.style.backgroundColor='transparent'
           el.style.opacity = "unset";
         });
       }
 
       kontAranz.style.opacity = 0.6;
-      //kontAranz.style.backgroundColor="#0000ff"
 
       this.pogledajAranzman(this);
     };
@@ -207,7 +204,6 @@ export class Aranzman {
       if (brpasosa.value === "") {
         alert("morate uneti broj pasosa");
         brpasosa.style.backgroundColor = "#c29b9b";
-        //return false
       } else {
         brpasosa.style.backgroundColor = "white";
         this.proveraPrijave(brpasosa.value);
@@ -243,17 +239,14 @@ export class Aranzman {
       prezimeSaputnika.type = "text";
       prezimeSaputnika.className = "prezimeSaputnika";
 
-
-   
-
       const labelbrojpasosa = document.createElement("label");
       labelbrojpasosa.innerHTML = `Broj pasosa saputnika`;
 
       const brojpasosa = document.createElement("input");
       brojpasosa.type = "number";
       brojpasosa.className = "brojPasosaSaputnika";
-      
-   if (i < this.novaMusterija.brojSaputnika) {
+
+      if (i < this.novaMusterija.brojSaputnika) {
         prezimeSaputnika.value = this.novaMusterija.prezimenaSaputnika[i];
         imeSaputnika.value = this.novaMusterija.imenaSaputnika[i];
         brojpasosa.value = this.novaMusterija.brojPasosaSaputnika[i];
@@ -276,15 +269,14 @@ export class Aranzman {
   }
 
   proveraPrijave(element) {
-    console.log(element, this.id);
+    
     fetch(
       `https://localhost:5001/Agencija/PronadjiMusteriju/${this.id}/${element}`
     )
       .then((res) => {
         if (res.status == 200) {
           res.json().then((data) => {
-            // console.log(data);
-
+           
             let imenasaputnika = [];
             let prezimenasaputnika = [];
             let brojpasosasaputnika = [];
@@ -314,32 +306,9 @@ export class Aranzman {
       .catch((p) => {
         alert("Greška prilikom upisa.");
       });
-    /*let pom = true;
-    this.musterije.forEach((musterija) => {
-      if (musterija.brojPasosa === element) {
-        pom = false;
-        alert("Prijavljeni ste za ovo putovanje");
-
-        musterija.prikaziPodatke(this);
-        // return  false
-      } else {
-        musterija.brojPasosaSaputnika.forEach((brpasosa) => {
-          if (brpasosa === element) {
-            pom = false;
-            alert(
-              `Prijavljeni ste kao saputnik na ovom letovanju. Prijavio vas je ${musterija.ime} ${musterija.prezime}`
-            );
-            // return false
-          }
-        });
-      }
-    });
-    if (pom) return true;
-    else return false;*/
   }
 
   prikaziPodatke(element) {
-    // console.log(element);
     var zauzeta = Number(element) + Number(this.brojZauzetihMesta);
     let listaZauzetihMesta = document.querySelector(".listaZauzetihMesta");
     listaZauzetihMesta.innerHTML = `Broj zauzetih mesta:   ${zauzeta}`;
@@ -353,5 +322,6 @@ export class Aranzman {
         labelaAranzmanaMesta.innerHTML = zauzeta + "/" + this.brojMesta;
       }
     });
+    this.brojZauzetihMesta = zauzeta;
   }
 }

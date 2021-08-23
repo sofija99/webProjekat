@@ -1,11 +1,11 @@
 export class Musterija {
   constructor(
-    id,
-    ime,
-    prezime,
-    brojsaputnika,
-    datumrodjenja,
-    brojpasosa,
+    id=999,
+    ime="n",
+    prezime="n",
+    brojsaputnika=0,
+    datumrodjenja=Date().now,
+    brojpasosa=0,
     imesaputnika,
     prezimenasaputnika,
     brojpasosasaputnika,
@@ -21,10 +21,9 @@ export class Musterija {
     this.prezimenaSaputnika = prezimenasaputnika;
     this.brojPasosaSaputnika = brojpasosasaputnika;
     this.kontaktTelefon = kontakttelefon;
+    this.validacijaPodataka();
   }
   prikaziPodatke(aranzman) {
-    //  console.log("//////////////////////////////////")
-    // console.log(this)
     let host = document.querySelector(".kontejnerMusterija");
     const elementiHosta = [
       "imeMusterije",
@@ -47,13 +46,11 @@ export class Musterija {
       let elhosta = host.querySelector(`.${el}`);
       elhosta.value = atributimusterije[index];
       if (index === 2) {
-        //console.log(atributimusterije[index])
         elhosta.valueAsDate = new Date(atributimusterije[index]);
-        //console.log(elhosta)
       }
     });
     let strhost = document.querySelector(".kontejnerAtributaBrSaputnika");
-    //console.log(strhost)
+
     aranzman.dodajSaputnike(strhost, this.brojSaputnika);
     for (let k = 0; k < this.brojSaputnika; k++) {
       let elhosta = host.querySelector(`.saputnik${k + 1}`);
@@ -95,7 +92,7 @@ export class Musterija {
       "kontaktTelefon",
       "brojSaputnika",
     ];
-    const vrednostiEl = [];
+    let vrednostiEl = [];
 
     var svepopunjeno = true;
 
@@ -103,6 +100,47 @@ export class Musterija {
     let prezimenasaputnika = [];
     let brojpasosasaputnika = [];
 
+    vrednostiEl = elementi.map((el) => document.querySelector(`.${el}`).value);
+    //console.log("vrednosti elemeneata map", vrednostiEl);
+    let nepopunjeniel = elementi.filter(
+      (el, index) => vrednostiEl[index] === ""
+    );
+   // console.log(nepopunjeniel);
+    nepopunjeniel.map((el, index) => {
+     // console.log(this);
+      if (svepopunjeno) {
+        alert(`Morate uneti sva polja`);
+        svepopunjeno = false;
+      }
+      document.querySelectorAll(`.${el}`)[0].style.backgroundColor = "#c29b9b";
+    });
+   // console.log(svepopunjeno, vrednostiEl[5]);
+    if (svepopunjeno && vrednostiEl[5] > 0) {
+      elementi.map(
+        (el) =>
+          (document.querySelectorAll(`.${el}`)[0].style.backgroundColor =
+            "white")
+      );
+      let saputnik = document.querySelectorAll(`[class^='saputnik']`);
+      console.log(saputnik);
+      saputnik.forEach((el, index) => {
+        imenasaputnika[index] = el.querySelector(".imeSaputnika").value;
+        prezimenasaputnika[index] = el.querySelector(".prezimeSaputnika").value;
+        brojpasosasaputnika[index] = el.querySelector(
+          ".brojPasosaSaputnika"
+        ).value;
+        if (
+          imenasaputnika[index] === "" ||
+          prezimenasaputnika[index] === "" ||
+          brojpasosasaputnika[index] === ""
+        ) {
+          alert("Morate uneti sva polja saputnika!");
+          svepopunjeno = false;
+        }
+      });
+
+    }
+    /*
     elementi.forEach((el, ind) => {
       vrednostiEl[ind] = document.querySelectorAll(`.${el}`)[0].value;
       if (vrednostiEl[ind] === "") {
@@ -143,6 +181,8 @@ export class Musterija {
         document.querySelectorAll(`.${el}`)[0].style.backgroundColor = "white";
       }
     });
+
+*/
     if (svepopunjeno) {
       let saputnici = [];
       imenasaputnika.forEach((ime, index) => {
@@ -161,8 +201,8 @@ export class Musterija {
       this.imenaSaputnika = imenasaputnika;
       this.prezimenaSaputnika = prezimenasaputnika;
       this.brojPasosaSaputnika = brojpasosasaputnika;
-
-      console.log(vrednostiEl[5]);
+//this.validacijaPodataka();
+      if(this.validacijaPodataka())
       fetch("https://localhost:5001/Agencija/UpisiMusteriju/" + aranzman.id, {
         method: "POST",
         headers: {
@@ -181,15 +221,31 @@ export class Musterija {
         .then((res) => {
           if (res.ok) {
             alert("Uspesno ste se prijavili!");
-            console.log("**********************************", vrednostiEl[5]);
-            console.log(this);
-            aranzman.novaMusterija = this; //res.musterijanova;
+
+            aranzman.novaMusterija = this;
             aranzman.prikaziPodatke(Number(vrednostiEl[5]) + 1);
+
             let host = document.querySelector(".kontejnerMusterija");
             this.promeniDugmice(host, aranzman);
           } else if (res.status == 400) {
             res.json().then((res) => {
-              aranzman.novaMusterija = res.musterijanova;
+              console.log(res);
+              let musterija=res.musterijanova;
+              this.id = musterija.id;
+              this.ime = musterija.ime;
+              this.prezime = musterija.prezime;
+              this.brojSaputnika = musterija.brojSaputnika;
+              this.datumRodjenja = musterija.datumRodjenja;
+              this.brojPasosa = musterija.brojPasosa;
+              if(this.brojSaputnika>0)
+              musterija.saputnici.forEach((s,index)=>{
+                this.imenaSaputnika[index] = s.ime;
+              this.prezimenaSaputnika[index]  = s.prezime;
+              this.brojPasosaSaputnika[index]  = s.brojPasosa;
+              })
+              
+              this.kontaktTelefon = musterija.kontaktTelefon;
+              aranzman.novaMusterija = this;// new Musterija(musterija.id,musterija.ime,musterija.prezime,musterija.pre);
               aranzman.novaMusterija.prikaziPodatke(aranzman);
             });
             let host = document.querySelector(".kontejnerMusterija");
@@ -205,12 +261,10 @@ export class Musterija {
         .catch((res) => {
           alert("Greška prilikom upisa.");
         });
-
     }
   }
 
   odjaviSe(aranzman, izmene = false) {
-    console.log("///////////////////////////////////////////", this);
     fetch(
       "https://localhost:5001/Agencija/IzbrisiMusteriju/" +
         Number(this.id) +
@@ -221,13 +275,9 @@ export class Musterija {
       }
     )
       .then((res) => {
-        console.log(res);
         if (res.ok) {
           alert("Uspesno ste otkazali putovanje");
-          console.log(
-            "**********************************",
-            0 - 1 - this.brojsaputnika
-          );
+
           aranzman.prikaziPodatke(Number(0 - 1 - this.brojSaputnika));
           let prijavaiprovera = document.querySelectorAll("button");
           prijavaiprovera.forEach((el) => {
@@ -238,24 +288,6 @@ export class Musterija {
         }
       })
       .catch((e) => console.log(e));
-    ///console.log("****************",aranzman)
-    /* const prethodnomusterija=aranzman.musterije.length
-        aranzman.musterije = aranzman.musterije.filter(el=>{el.brojPasosa!=this.brojPasosa})
-        if(aranzman.musterije.length!=prethodnomusterija){
-        aranzman.brojZauzetihMesta=aranzman.brojZauzetihMesta-Number(this.brojSaputnika)-1
-        
-       // console.log("****************",aranzman)
-        aranzman.prikaziPodatke( aranzman.brojZauzetihMesta)
-        if(izmene===false){
-        alert('Uspesno ste otkazali putovanje')
-        let prijavaiprovera=document.querySelectorAll('button')
-
-        prijavaiprovera.forEach(el=>{el.disabled=true})
-        }
-    }
-    else{
-        alert('Putovanje je vec otkazano')
-    }*/
   }
 
   sacuvajizmene(aranzman) {
@@ -316,7 +348,7 @@ export class Musterija {
         document.querySelectorAll(`.${el}`)[0].style.backgroundColor = "white";
       }
     });
-    /////////////////////////////////////////////////
+    //SAPUTNICI
     let saputnici = [];
     imenasaputnika.forEach((ime, index) => {
       saputnici.push({
@@ -344,10 +376,7 @@ export class Musterija {
       .then((res) => {
         if (res.ok) {
           alert("Uspesno ste uneli izmene!");
-          console.log(
-            "**********************************",
-            0 - this.brojSaputnika + Number(vrednostiEl[5])
-          );
+
           aranzman.prikaziPodatke(
             0 - Number(this.brojSaputnika) + Number(vrednostiEl[5])
           );
@@ -360,8 +389,33 @@ export class Musterija {
       .catch((p) => {
         alert("Greška prilikom upisa.");
       });
+  }
 
-    //this.odjaviSe(aranzman, true);
-    // aranzman.prijaviSe();
+  validacijaPodataka(){
+
+   
+
+    if(this.brojSaputnika!=null && isNaN(this.brojSaputnika)){
+      alert('Broj saputnika mora biti broj')
+      return false;
+    }
+   // this.datumRodjenja = datumrodjenja;
+    if(this.brojPasosa!=null && isNaN( this.brojPasosa )){
+      alert('Broj pasosa mora biti broj')
+      return false;
+    }
+
+    //this.imenaSaputnika = imesaputnika;
+    //this.prezimenaSaputnika = prezimenasaputnika;
+    if(this.brojpogresnihpasosa!=null )
+   {let brojpogresnihpasosa=brojPasosaSaputnika.filter(el=>isNaN(el));
+   if(brojpogresnihpasosa.length>0)
+   {
+     alert('Broj pasosa saputnika mora biti broj')
+    return false;
+    }
+  }
+ 
+    return true
   }
 }
